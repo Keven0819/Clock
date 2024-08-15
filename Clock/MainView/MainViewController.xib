@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController" customModule="Clock" customModuleProvider="target">
+            <connections>
+                <outlet property="tableView" destination="kiG-3e-WKg" id="oD3-d5-w6X"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="gpT-gG-bcf"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tabBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wbu-9x-qib">
+                    <rect key="frame" x="-4.6666666666666572" y="769" width="402.33333333333326" height="49"/>
+                    <items>
+                        <tabBarItem title="世界時鐘" image="globe" catalog="system" id="E8J-8f-8dF"/>
+                        <tabBarItem title="鬧鐘" image="alarm" catalog="system" id="tw5-Q0-VLC"/>
+                        <tabBarItem title="碼錶" image="stopwatch" catalog="system" id="b2I-ru-9xs"/>
+                        <tabBarItem title="計時器" image="timer" catalog="system" id="l9J-ai-CzE"/>
+                    </items>
+                </tabBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kiG-3e-WKg">
+                    <rect key="frame" x="0.0" y="101" width="393" height="666"/>
+                </tableView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="wbu-9x-qib" firstAttribute="height" secondItem="kiG-3e-WKg" secondAttribute="height" multiplier="0.0735736" id="4ge-65-2fr"/>
+                <constraint firstItem="wbu-9x-qib" firstAttribute="width" secondItem="kiG-3e-WKg" secondAttribute="width" multiplier="1.02375" id="4gq-j1-iXR"/>
+                <constraint firstItem="kiG-3e-WKg" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="C6H-Pb-eTK"/>
+                <constraint firstItem="kiG-3e-WKg" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.78169" id="I9v-YN-TtQ"/>
+                <constraint firstItem="kiG-3e-WKg" firstAttribute="centerY" secondItem="fnl-2z-Ty3" secondAttribute="centerY" multiplier="0.99" id="JaM-3O-eLH"/>
+                <constraint firstItem="wbu-9x-qib" firstAttribute="top" secondItem="kiG-3e-WKg" secondAttribute="bottom" constant="2" id="cmf-JZ-9M8"/>
+                <constraint firstItem="wbu-9x-qib" firstAttribute="centerX" secondItem="kiG-3e-WKg" secondAttribute="centerX" id="g3i-SQ-auT"/>
+                <constraint firstItem="kiG-3e-WKg" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="nM4-Z1-B27"/>
+            </constraints>
+            <point key="canvasLocation" x="170" y="32"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="alarm" catalog="system" width="123" height="128"/>
+        <image name="globe" catalog="system" width="128" height="123"/>
+        <image name="stopwatch" catalog="system" width="121" height="128"/>
+        <image name="timer" catalog="system" width="128" height="123"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
