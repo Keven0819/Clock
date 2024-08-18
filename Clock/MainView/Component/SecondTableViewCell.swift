@@ -10,6 +10,8 @@ import UIKit
 class SecondTableViewCell: UITableViewCell {
 
     @IBOutlet weak var lbList: UILabel!
+    @IBOutlet weak var lbName: UILabel!
+    @IBOutlet weak var swAlarm: UISwitch!
     
     static let identifier = "SecondTableViewCell"
     

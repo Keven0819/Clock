@@ -26,6 +26,7 @@ class RepeatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        tableView.reloadData()
     }
     
     // MARK: - UI Settings
@@ -36,7 +37,7 @@ class RepeatViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(doneTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "完成", style: .plain, target: self, action: #selector(doneTapped))
     }
     
     // MARK: - IBAction

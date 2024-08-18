@@ -18,6 +18,7 @@ class MainViewController: UIViewController {
     
     var pageTitle: [String] = ["鬧鐘"] //這是我要在MainTalbeViewCell印出來的內容
     var alarms: [AlarmData] = []
+    var idEditing: Bool = false
     
     // MARK: - LifeCycle
     
@@ -36,6 +37,8 @@ class MainViewController: UIViewController {
     
     func setUI() {
         setTableView()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "編輯", style: .plain, target: self, action: #selector(editTapped))
     }
     
     func setTableView() {
@@ -43,21 +46,33 @@ class MainViewController: UIViewController {
         tableView.register(UINib(nibName: "SecondTableViewCell", bundle: nil), forCellReuseIdentifier: SecondTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(doneTapped))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "編輯", style: .done, target: self, action: #selector(editTapped))
     }
     
     // MARK: - IBAction
     
-    @objc func doneTapped() {
-        addAlarm()
+    @objc func addTapped() {
+        let addAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
+        addAlarmVC.delegate = self
+        let navController = UINavigationController(rootViewController: addAlarmVC)
+        self.present(navController, animated: true, completion: nil)
     }
     
     @objc func editTapped() {
-        editAlarm()
+        isEditing.toggle()
+        tableView.setEditing(isEditing, animated: true)
+        navigationItem.leftBarButtonItem?.title = isEditing ? "完成" : "編輯"
+        tableView.reloadData()
     }
     
-    
+    @objc func alarmSwitchChange(_ sender: UISwitch) {
+        let index = sender.tag
+        let realm = try! Realm()
+        if let alarm = realm.objects(AlarmData.self).sorted(byKeyPath: "creatTime", ascending: false)[safe: index] {
+            try! realm.write {
+                alarm.isEnabled = sender.isOn
+            }
+        }
+    }
     
     // MARK: - Function
     func loadAlarms() {
@@ -68,40 +83,19 @@ class MainViewController: UIViewController {
     
     
     func deleteAlarm(_ alarm: AlarmData, at indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "刪除", message: "確定刪除嗎", preferredStyle: .alert)
-        let deleteAction = UIAlertAction(title: "確定", style:  .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            let realm = try! Realm()
-            try! realm.write {
-                realm.delete(alarm)
-            }
-            
-            //更新數據
-            self.alarms.remove(at: indexPath.row)
-            
-            self.tableView.deleteRows(at: [indexPath], with: .fade)
+        let realm = try! Realm()
+        
+        try! realm.write {
+            realm.delete(alarm)
         }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        alertController.addAction(deleteAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    func editAlarm() {
-    }
-    
-    func addAlarm() {
-        let addAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
-        addAlarmVC.delegate = self
-        let navController = UINavigationController(rootViewController: addAlarmVC)
-        self.present(navController, animated: true, completion: nil)
+        alarms.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
     }
 }
 
 // MARK: - Extensions
 
-extension MainViewController: UITableViewDelegate, UITableViewDataSource, AddAlarmViewControllerDelegate {
+extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -126,16 +120,42 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource, AddAla
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: SecondTableViewCell.identifier, for: indexPath) as! SecondTableViewCell
             let alarm = alarms[indexPath.row]
-            let formatter = DateFormatter()
-            formatter.dateFormat = "a HH:mm"
-            formatter.timeStyle = .short
-            formatter.locale = Locale(identifier: "zh_TW")
             cell.lbList.text = alarm.alarmTime
+            cell.lbName.text = alarm.name
+            cell.swAlarm.isOn = alarm.isEnabled
+            cell.swAlarm.tag = indexPath.row //存取我開關鬧鐘是在哪一列
+            cell.swAlarm.addTarget(self, action: #selector(alarmSwitchChange(_:)), for: .valueChanged)
+            cell.swAlarm.isHidden = isEditing
+            cell.accessoryType = .disclosureIndicator
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.identifier, for: indexPath) as! MainTableViewCell
             cell.lbTitle.text = pageTitle[0]
             return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section == 1 {
+            let alarm = alarms[indexPath.row]
+            let editAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
+            editAlarmVC.alarmToEdit = alarm
+            editAlarmVC.delegate = self
+            let navController = UINavigationController(rootViewController: editAlarmVC)
+            self.present(navController, animated: true, completion: nil)
+        }
+    }
+    
+    //這是避免我的標題鬧鐘前面也出現刪除圖示
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.section == 1
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let alarm = alarms[indexPath.row]
+            deleteAlarm(alarm, at: indexPath)
         }
     }
     
@@ -156,9 +176,31 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource, AddAla
         }
         return nil
     }
-    
+}
+
+extension MainViewController: AddAlarmViewControllerDelegate {
     func didAddNewAlarm() {
         loadAlarms()
         tableView.reloadData()
+    }
+    
+    func didUpdateAlarm() {
+        loadAlarms()
+        tableView.reloadData()
+    }
+    
+    func didDeleteAlarm(_ alarm: AlarmData) {
+        if let index = alarms.firstIndex(where: { $0._id == alarm._id }) {
+            alarms.remove(at: index)
+            tableView.deleteRows(at: [IndexPath(row: index, section: 1)], with: .fade)
+        }
+    }
+}
+
+//這邊做了一個自訂下標的動作，意義是讓我在存取的時候，如果超過集合的索引範圍不會崩潰，而是返回nil
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        //檢查是不是在有效範圍，在的話返回元素，不是的話返回nil
+        return indices.contains(index) ? self[index] : nil
     }
 }
