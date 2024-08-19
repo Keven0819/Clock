@@ -41,7 +41,6 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         super.viewDidLoad()
         setUI()
         setupTextFieldDelegate()
-        //setupButtonLayout()
         if let alarm = alarmToEdit {
             populateFields(with: alarm)
         }

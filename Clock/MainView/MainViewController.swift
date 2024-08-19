@@ -112,6 +112,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        tableView.allowsSelection = true
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.identifier, for: indexPath) as! MainTableViewCell
@@ -136,16 +137,21 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 1 {
+        switch indexPath.section {
+        case 0:
+            tableView.deselectRow(at: indexPath, animated: true)
+        case 1:
             let alarm = alarms[indexPath.row]
             let editAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
             editAlarmVC.alarmToEdit = alarm
             editAlarmVC.delegate = self
             let navController = UINavigationController(rootViewController: editAlarmVC)
             self.present(navController, animated: true, completion: nil)
+        default:
+            break
         }
     }
+
     
     //這是避免我的標題鬧鐘前面也出現刪除圖示
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -190,7 +196,7 @@ extension MainViewController: AddAlarmViewControllerDelegate {
     }
     
     func didDeleteAlarm(_ alarm: AlarmData) {
-        if let index = alarms.firstIndex(where: { $0._id == alarm._id }) {
+        if let index = alarms.firstIndex(where: { $0.creatTime == alarm.creatTime }) {
             alarms.remove(at: index)
             tableView.deleteRows(at: [IndexPath(row: index, section: 1)], with: .fade)
         }
