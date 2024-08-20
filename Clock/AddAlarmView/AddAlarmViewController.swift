@@ -33,7 +33,7 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
     weak var delegate: AddAlarmViewControllerDelegate?
     var repeatDays: [Bool] = Array(repeating: false, count: 7)
     var selectedSound: String = "馬林巴琴"
-    var alarmToEdit: AlarmData?
+    weak var alarmToEdit: AlarmData?
     
     // MARK: - LifeCycle
     
@@ -120,27 +120,16 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
     }
     
     @objc func deleteTapped() {
-        guard let alarmToDelete = alarmToEdit else { return }
-        
-        let alertController = UIAlertController(title: "刪除鬧鐘", message: "您確定要刪除此鬧鐘嗎？", preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "刪除", style: .destructive) { [weak self] _ in
-            guard let self = self else { return }
-            
+        if let alarm = alarmToEdit, !alarm.isInvalidated {
             let realm = try! Realm()
             try! realm.write {
-                realm.delete(alarmToDelete)
+                realm.delete(alarm)
             }
-            
-            self.delegate?.didDeleteAlarm(alarmToDelete)
-            self.dismiss(animated: true, completion: nil)
+            delegate?.didDeleteAlarm(alarm)
+        } else {
+            print("Cannot delete. Alarm has already been deleted or invalidated.")
         }
-        
-        alertController.addAction(cancelAction)
-        alertController.addAction(deleteAction)
-        
-        present(alertController, animated: true, completion: nil)
+        dismiss(animated: true)
     }
     
     @IBAction func pushToRepeat(_ sender: Any) {
@@ -192,8 +181,6 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
     func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "ah:mm"
-        formatter.amSymbol = "上午"
-        formatter.pmSymbol = "上午"
         formatter.locale = Locale(identifier: "zh_TW")
         return formatter.string(from: date)
     }

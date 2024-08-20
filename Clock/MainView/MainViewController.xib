@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eLA-t1-980">
-                    <rect key="frame" x="0.0" y="59" width="393" height="701"/>
+                    <rect key="frame" x="0.0" y="59" width="393" height="685"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
                 <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v5U-2d-R8g">
@@ -38,7 +38,7 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="v5U-2d-R8g" firstAttribute="leading" secondItem="eLA-t1-980" secondAttribute="leading" id="2Ws-tt-H4h"/>
-                <constraint firstItem="v5U-2d-R8g" firstAttribute="height" secondItem="eLA-t1-980" secondAttribute="height" multiplier="0.0690141" id="5i6-yO-27l"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="height" secondItem="eLA-t1-980" secondAttribute="height" multiplier="0.0690141" constant="1.0586748333333773" id="5i6-yO-27l"/>
                 <constraint firstItem="eLA-t1-980" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="7HJ-wz-RfV"/>
                 <constraint firstItem="v5U-2d-R8g" firstAttribute="width" secondItem="eLA-t1-980" secondAttribute="width" id="Jry-rN-B74"/>
                 <constraint firstItem="v5U-2d-R8g" firstAttribute="centerX" secondItem="eLA-t1-980" secondAttribute="centerX" id="Zp9-Kg-mmZ"/>
@@ -46,7 +46,7 @@
                 <constraint firstItem="v5U-2d-R8g" firstAttribute="trailing" secondItem="eLA-t1-980" secondAttribute="trailing" id="h0X-oh-QDc"/>
                 <constraint firstItem="eLA-t1-980" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ifF-DE-OsU"/>
                 <constraint firstItem="v5U-2d-R8g" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="u7c-8j-ynf"/>
-                <constraint firstItem="v5U-2d-R8g" firstAttribute="top" secondItem="eLA-t1-980" secondAttribute="bottom" constant="9" id="y3A-0F-kwr"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="top" secondItem="eLA-t1-980" secondAttribute="bottom" constant="25.666666666666629" id="y3A-0F-kwr"/>
             </constraints>
             <point key="canvasLocation" x="179.38931297709922" y="11.971830985915494"/>
         </view>

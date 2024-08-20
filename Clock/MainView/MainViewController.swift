@@ -74,10 +74,12 @@ class MainViewController: UIViewController {
     @objc func alarmSwitchChange(_ sender: UISwitch) {
         let index = sender.tag
         let realm = try! Realm()
-        if let alarm = realm.objects(AlarmData.self).sorted(byKeyPath: "creatTime", ascending: false)[safe: index] {
+        if let alarm = realm.objects(AlarmData.self).sorted(byKeyPath: "creatTime", ascending: false)[safe: index], !alarm.isInvalidated {
             try! realm.write {
                 alarm.isEnabled = sender.isOn
             }
+        } else {
+            print("Alarm has been deleted or invalidated.")
         }
     }
     
@@ -174,10 +176,12 @@ extension MainViewController: AddAlarmViewControllerDelegate {
     }
     
     func didDeleteAlarm(_ alarm: AlarmData) {
-        if let index = alarms.firstIndex(where: { $0.creatTime == alarm.creatTime }) {
-            alarms.remove(at: index)
-            tableView.deleteRows(at: [IndexPath(row: index, section: 1)], with: .fade)
-        }
+        if let index = alarms.firstIndex(where: { $0 == alarm }) {
+           alarms.remove(at: index)
+           tableView.reloadData()
+       } else {
+           print("Failed to find the deleted alarm.")
+       }
     }
 }
 
