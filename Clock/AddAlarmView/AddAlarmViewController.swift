@@ -161,7 +161,7 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         let newAlarm = AlarmData(
             alarmTime: formatDate(datePicker.date),
             creatTime: getSystemTime(),
-            name: txfRename.text ?? "",
+            name: txfRename.text?.isEmpty == true ? "鬧鐘" : txfRename.text ?? "",
             repeatDays: repeatDays
         )
         
@@ -180,7 +180,7 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         let realm = try! Realm()
         try! realm.write {
             alarm.alarmTime = formatDate(datePicker.date)
-            alarm.name = txfRename.text ?? ""
+            alarm.name = txfRename.text?.isEmpty == true ? "鬧鐘" : txfRename.text ?? ""
             alarm.repeatDays.removeAll()
             alarm.repeatDays.append(objectsIn: repeatDays)
         }
@@ -239,7 +239,7 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
 extension AddAlarmViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == txfRename {
-            btnSetAlarmName.text = textField.text
+            btnSetAlarmName.text = txfRename.text
         }
     }
 }

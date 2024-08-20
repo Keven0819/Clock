@@ -11,8 +11,6 @@
 		7BBD411B2C6B81F00015F29A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBD411A2C6B81F00015F29A /* SceneDelegate.swift */; };
 		7BBD41222C6B81F20015F29A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BBD41212C6B81F20015F29A /* Assets.xcassets */; };
 		7BBD41252C6B81F20015F29A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 7BBD41242C6B81F20015F29A /* Base */; };
-		7BBD41342C6B82860015F29A /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBD412C2C6B82860015F29A /* MainTableViewCell.swift */; };
-		7BBD41352C6B82860015F29A /* MainTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7BBD412D2C6B82860015F29A /* MainTableViewCell.xib */; };
 		7BBD41362C6B82860015F29A /* SecondTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBD412E2C6B82860015F29A /* SecondTableViewCell.swift */; };
 		7BBD41372C6B82860015F29A /* SecondTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7BBD412F2C6B82860015F29A /* SecondTableViewCell.xib */; };
 		7BBD41382C6B82860015F29A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBD41312C6B82860015F29A /* MainViewController.swift */; };
@@ -42,8 +40,6 @@
 		7BBD41212C6B81F20015F29A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7BBD41242C6B81F20015F29A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7BBD41262C6B81F20015F29A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7BBD412C2C6B82860015F29A /* MainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
-		7BBD412D2C6B82860015F29A /* MainTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainTableViewCell.xib; sourceTree = "<group>"; };
 		7BBD412E2C6B82860015F29A /* SecondTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondTableViewCell.swift; sourceTree = "<group>"; };
 		7BBD412F2C6B82860015F29A /* SecondTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SecondTableViewCell.xib; sourceTree = "<group>"; };
 		7BBD41312C6B82860015F29A /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -116,8 +112,6 @@
 		7BBD41302C6B82860015F29A /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				7BBD412C2C6B82860015F29A /* MainTableViewCell.swift */,
-				7BBD412D2C6B82860015F29A /* MainTableViewCell.xib */,
 				7BBD412E2C6B82860015F29A /* SecondTableViewCell.swift */,
 				7BBD412F2C6B82860015F29A /* SecondTableViewCell.xib */,
 			);
@@ -293,7 +287,6 @@
 				7BBD415E2C6E73CD0015F29A /* 鬼畜.mp3 in Resources */,
 				7BBD41472C6B829D0015F29A /* RepeatTableViewCell.xib in Resources */,
 				7BBD413F2C6B828D0015F29A /* AddAlarmViewController.xib in Resources */,
-				7BBD41352C6B82860015F29A /* MainTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,7 +348,6 @@
 				7BBD41382C6B82860015F29A /* MainViewController.swift in Sources */,
 				7BBD41482C6B829D0015F29A /* RepeatViewController.swift in Sources */,
 				7BBD41582C6DC03F0015F29A /* AlarmData.swift in Sources */,
-				7BBD41342C6B82860015F29A /* MainTableViewCell.swift in Sources */,
 				7BBD411B2C6B81F00015F29A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

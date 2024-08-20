@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController" customModule="Clock" customModuleProvider="target">
             <connections>
-                <outlet property="tableView" destination="kiG-3e-WKg" id="oD3-d5-w6X"/>
+                <outlet property="tableView" destination="eLA-t1-980" id="Zhj-NH-G1o"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="gpT-gG-bcf"/>
             </connections>
         </placeholder>
@@ -19,32 +19,36 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tabBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wbu-9x-qib">
-                    <rect key="frame" x="-4.6666666666666572" y="769" width="402.33333333333326" height="83"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eLA-t1-980">
+                    <rect key="frame" x="0.0" y="59" width="393" height="701"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+                <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v5U-2d-R8g">
+                    <rect key="frame" x="0.0" y="769.66666666666663" width="393" height="48.333333333333371"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <items>
-                        <tabBarItem title="世界時鐘" image="globe" catalog="system" id="E8J-8f-8dF"/>
-                        <tabBarItem title="鬧鐘" image="alarm" catalog="system" id="tw5-Q0-VLC"/>
-                        <tabBarItem title="碼錶" image="stopwatch" catalog="system" id="b2I-ru-9xs"/>
-                        <tabBarItem title="計時器" image="timer" catalog="system" id="l9J-ai-CzE"/>
+                        <tabBarItem title="世界時鐘" image="globe" catalog="system" id="Dsa-xr-nZC"/>
+                        <tabBarItem title="鬧鐘" image="alarm" catalog="system" id="ut3-Ah-Zo7"/>
+                        <tabBarItem title="碼錶" image="stopwatch" catalog="system" id="5lr-rZ-RLA"/>
+                        <tabBarItem title="計時器" image="timer" catalog="system" id="ont-Rt-fYs"/>
                     </items>
                 </tabBar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kiG-3e-WKg">
-                    <rect key="frame" x="0.0" y="93" width="393" height="647"/>
-                </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="wbu-9x-qib" firstAttribute="width" secondItem="kiG-3e-WKg" secondAttribute="width" multiplier="1.02375" id="CFm-HZ-8g8"/>
-                <constraint firstItem="wbu-9x-qib" firstAttribute="top" secondItem="kiG-3e-WKg" secondAttribute="bottom" constant="29" id="aAg-iI-4J0"/>
-                <constraint firstItem="wbu-9x-qib" firstAttribute="centerX" secondItem="kiG-3e-WKg" secondAttribute="centerX" id="aCq-2t-RFS"/>
-                <constraint firstItem="kiG-3e-WKg" firstAttribute="centerY" secondItem="fnl-2z-Ty3" secondAttribute="centerY" multiplier="0.95" id="hxq-dw-kUX"/>
-                <constraint firstItem="kiG-3e-WKg" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.75939" id="mrA-OF-BBK"/>
-                <constraint firstItem="wbu-9x-qib" firstAttribute="height" secondItem="kiG-3e-WKg" secondAttribute="height" multiplier="0.128284" id="u5c-2D-qG4"/>
-                <constraint firstItem="kiG-3e-WKg" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="xQR-BM-kel"/>
-                <constraint firstItem="kiG-3e-WKg" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="zSi-d3-5CT"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="leading" secondItem="eLA-t1-980" secondAttribute="leading" id="2Ws-tt-H4h"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="height" secondItem="eLA-t1-980" secondAttribute="height" multiplier="0.0690141" id="5i6-yO-27l"/>
+                <constraint firstItem="eLA-t1-980" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="7HJ-wz-RfV"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="width" secondItem="eLA-t1-980" secondAttribute="width" id="Jry-rN-B74"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="centerX" secondItem="eLA-t1-980" secondAttribute="centerX" id="Zp9-Kg-mmZ"/>
+                <constraint firstItem="eLA-t1-980" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="ggV-DO-CzX"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="trailing" secondItem="eLA-t1-980" secondAttribute="trailing" id="h0X-oh-QDc"/>
+                <constraint firstItem="eLA-t1-980" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ifF-DE-OsU"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="u7c-8j-ynf"/>
+                <constraint firstItem="v5U-2d-R8g" firstAttribute="top" secondItem="eLA-t1-980" secondAttribute="bottom" constant="9" id="y3A-0F-kwr"/>
             </constraints>
-            <point key="canvasLocation" x="168.70229007633588" y="31.690140845070424"/>
+            <point key="canvasLocation" x="179.38931297709922" y="11.971830985915494"/>
         </view>
     </objects>
     <resources>

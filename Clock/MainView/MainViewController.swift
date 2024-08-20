@@ -25,6 +25,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
+        setupNavigationBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,11 +42,17 @@ class MainViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "編輯", style: .plain, target: self, action: #selector(editTapped))
     }
     
+    func setupNavigationBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.title = "鬧鐘"
+    }
+    
     func setTableView() {
-        tableView.register(UINib(nibName: "MainTableViewCell", bundle: nil), forCellReuseIdentifier: MainTableViewCell.identifier)
         tableView.register(UINib(nibName: "SecondTableViewCell", bundle: nil), forCellReuseIdentifier: SecondTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.contentInsetAdjustmentBehavior = .automatic
     }
     
     // MARK: - IBAction
@@ -97,66 +104,37 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return pageTitle.count
-        case 1:
-            return alarms.count
-        default:
-            return pageTitle.count
-        }
+        return alarms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         tableView.allowsSelection = true
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.identifier, for: indexPath) as! MainTableViewCell
-            cell.lbTitle.text = pageTitle[0]
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: SecondTableViewCell.identifier, for: indexPath) as! SecondTableViewCell
-            let alarm = alarms[indexPath.row]
-            cell.lbList.text = alarm.alarmTime
-            cell.lbName.text = alarm.name
-            cell.swAlarm.isOn = alarm.isEnabled
-            cell.swAlarm.tag = indexPath.row //存取我開關鬧鐘是在哪一列
-            cell.swAlarm.addTarget(self, action: #selector(alarmSwitchChange(_:)), for: .valueChanged)
-            cell.swAlarm.isHidden = isEditing
-            cell.accessoryType = .disclosureIndicator
-            return cell
-        default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.identifier, for: indexPath) as! MainTableViewCell
-            cell.lbTitle.text = pageTitle[0]
-            return cell
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: SecondTableViewCell.identifier, for: indexPath) as! SecondTableViewCell
+        let alarm = alarms[indexPath.row]
+        cell.lbList.text = alarm.alarmTime
+        cell.lbName.text = alarm.name.isEmpty ? "鬧鐘" : alarm.name
+        cell.swAlarm.isOn = alarm.isEnabled
+        cell.swAlarm.tag = indexPath.row //存取我開關鬧鐘是在哪一列
+        cell.swAlarm.addTarget(self, action: #selector(alarmSwitchChange(_:)), for: .valueChanged)
+        cell.swAlarm.isHidden = isEditing
+        cell.accessoryType = .disclosureIndicator
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
-            tableView.deselectRow(at: indexPath, animated: true)
-        case 1:
-            let alarm = alarms[indexPath.row]
-            let editAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
-            editAlarmVC.alarmToEdit = alarm
-            editAlarmVC.delegate = self
-            let navController = UINavigationController(rootViewController: editAlarmVC)
-            self.present(navController, animated: true, completion: nil)
-        default:
-            break
-        }
+        tableView.deselectRow(at: indexPath, animated: true)
+        let alarm = alarms[indexPath.row]
+        let editAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
+        editAlarmVC.alarmToEdit = alarm
+        editAlarmVC.delegate = self
+        let navController = UINavigationController(rootViewController: editAlarmVC)
+        self.present(navController, animated: true, completion: nil)
     }
 
-    
-    //這是避免我的標題鬧鐘前面也出現刪除圖示
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.section == 1
-    }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -166,7 +144,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? { //trailingSwipeActionsConfigurationForRowAt 這個是左滑的動作
-        if indexPath.section == 1 {
+        if indexPath.section == 0 {
             let deleteAction = UIContextualAction(style: .destructive, title: "刪除") { [weak self] (_, _, completionHandler) in
                 guard let self = self else { return }
                 let alarm = self.alarms[indexPath.row]
