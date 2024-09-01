@@ -128,17 +128,9 @@
 			path = MainView;
 			sourceTree = "<group>";
 		};
-		7BBD413A2C6B828D0015F29A /* Component */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Component;
-			sourceTree = "<group>";
-		};
 		7BBD413D2C6B828D0015F29A /* AddAlarmView */ = {
 			isa = PBXGroup;
 			children = (
-				7BBD413A2C6B828D0015F29A /* Component */,
 				7BBD413B2C6B828D0015F29A /* AddAlarmViewController.swift */,
 				7BBD413C2C6B828D0015F29A /* AddAlarmViewController.xib */,
 			);

@@ -16,7 +16,6 @@ class MainViewController: UIViewController {
     
     // MARK: - Property
     
-    var pageTitle: [String] = ["鬧鐘"] //這是我要在MainTalbeViewCell印出來的內容
     var alarms: [AlarmData] = []
     var idEditing: Bool = false
     
@@ -44,7 +43,6 @@ class MainViewController: UIViewController {
     
     func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "鬧鐘"
     }
     
@@ -52,7 +50,6 @@ class MainViewController: UIViewController {
         tableView.register(UINib(nibName: "SecondTableViewCell", bundle: nil), forCellReuseIdentifier: SecondTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.contentInsetAdjustmentBehavior = .automatic
     }
     
     // MARK: - IBAction
@@ -68,7 +65,11 @@ class MainViewController: UIViewController {
         isEditing.toggle()
         tableView.setEditing(isEditing, animated: true)
         navigationItem.leftBarButtonItem?.title = isEditing ? "完成" : "編輯"
-        tableView.reloadData()
+        tableView.visibleCells.forEach { cell in
+            if let switchControl = (cell as? SecondTableViewCell)?.swAlarm {
+                switchControl.isHidden = isEditing
+            }
+        }
     }
     
     @objc func alarmSwitchChange(_ sender: UISwitch) {
@@ -79,7 +80,7 @@ class MainViewController: UIViewController {
                 alarm.isEnabled = sender.isOn
             }
         } else {
-            print("Alarm has been deleted or invalidated.")
+            print("鬧鐘已被刪除或失效。")
         }
     }
     
@@ -106,17 +107,17 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return alarms.count
+        return section == 0 ? alarms.filter { $0.isEnabled }.count : alarms.filter { !$0.isEnabled }.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableView.allowsSelection = true
         let cell = tableView.dequeueReusableCell(withIdentifier: SecondTableViewCell.identifier, for: indexPath) as! SecondTableViewCell
-        let alarm = alarms[indexPath.row]
+        let filteredAlarms = alarms.filter { indexPath.section == 0 ? $0.isEnabled : !$0.isEnabled }
+        let alarm = filteredAlarms[indexPath.row]
         cell.lbList.text = alarm.alarmTime
         cell.lbName.text = alarm.name.isEmpty ? "鬧鐘" : alarm.name
         cell.swAlarm.isOn = alarm.isEnabled
@@ -128,8 +129,10 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.allowsSelection = true
         tableView.deselectRow(at: indexPath, animated: true)
-        let alarm = alarms[indexPath.row]
+        let filteredAlarms = alarms.filter { indexPath.section == 0 ? $0.isEnabled : !$0.isEnabled }
+        let alarm = filteredAlarms[indexPath.row]
         let editAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
         editAlarmVC.alarmToEdit = alarm
         editAlarmVC.delegate = self
@@ -140,27 +143,24 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let alarm = alarms[indexPath.row]
+            let filteredAlarms = alarms.filter { indexPath.section == 0 ? $0.isEnabled : !$0.isEnabled }
+            let alarm = filteredAlarms[indexPath.row]
             deleteAlarm(alarm, at: indexPath)
         }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? { //trailingSwipeActionsConfigurationForRowAt 這個是左滑的動作
-        if indexPath.section == 0 {
-            let deleteAction = UIContextualAction(style: .destructive, title: "刪除") { [weak self] (_, _, completionHandler) in
-                guard let self = self else { return }
-                let alarm = self.alarms[indexPath.row]
-                self.deleteAlarm(alarm, at: indexPath)
-                completionHandler(true)
-            }
-            
-            deleteAction.backgroundColor = .red
-            
-            let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-            configuration.performsFirstActionWithFullSwipe = true // 滑動就可執行
-            return configuration
+        let deleteAction = UIContextualAction(style: .destructive, title: "刪除") { [weak self] (_, _, completionHandler) in
+            guard let self = self else { return }
+            let filteredAlarms = self.alarms.filter { indexPath.section == 0 ? $0.isEnabled : !$0.isEnabled }
+            let alarm = filteredAlarms[indexPath.row]
+            self.deleteAlarm(alarm, at: indexPath)
+            completionHandler(true)
         }
-        return nil
+        
+        deleteAction.backgroundColor = .red
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
 
