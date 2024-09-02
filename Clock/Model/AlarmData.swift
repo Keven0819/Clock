@@ -14,14 +14,16 @@ class AlarmData: Object {
     @Persisted var creatTime: String = "" //創建鬧鐘的時間
     @Persisted var name: String = ""
     @Persisted var repeatDays: List<Bool> = List<Bool>()
+    @Persisted var sound: String = ""
     @Persisted var isEnabled: Bool = true
     
-    convenience init(alarmTime: String, creatTime: String, name: String = "",
-                     repeatDays: [Bool] = Array(repeating: false, count: 7)) {
+    convenience init(alarmTime: String, creatTime: String, name: String,
+                     repeatDays: [Bool] = Array(repeating: false, count: 7), sound: String) {
         self.init()
         self.alarmTime = alarmTime
         self.creatTime = creatTime
         self.name = name
+        self.sound = sound
         self.repeatDays.append(objectsIn: repeatDays)
     }
 }

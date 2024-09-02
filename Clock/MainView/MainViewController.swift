@@ -25,6 +25,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setUI()
         setupNavigationBar()
+        requestNotificationPermission()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,11 +96,27 @@ class MainViewController: UIViewController {
     func deleteAlarm(_ alarm: AlarmData, at indexPath: IndexPath) {
         let realm = try! Realm()
         
+        // 刪除與此鬧鐘相關的所有通知
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.creatTime])
+        for index in 0..<7 {
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(alarm.creatTime)_\(index)"])
+        }
+        
         try! realm.write {
             realm.delete(alarm)
         }
         alarms.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
+    }
+    
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                print("Notification permission granted")
+            } else {
+                print("Notification permission denied")
+            }
+        }
     }
 }
 
@@ -135,6 +152,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
         let alarm = filteredAlarms[indexPath.row]
         let editAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
         editAlarmVC.alarmToEdit = alarm
+        editAlarmVC.selectedSound = alarm.sound
         editAlarmVC.delegate = self
         let navController = UINavigationController(rootViewController: editAlarmVC)
         self.present(navController, animated: true, completion: nil)

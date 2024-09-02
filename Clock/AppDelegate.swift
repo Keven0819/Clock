@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         //resetRealmDatabase()
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+            
+            if granted {
+                print("Allowed")
+            } else {
+                print("Not Allowed")
+            }
+        }
         
         func resetRealmDatabase() {
             let realmURL = Realm.Configuration.defaultConfiguration.fileURL!

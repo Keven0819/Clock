@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import UserNotifications
 
 protocol AddAlarmViewControllerDelegate: AnyObject {
     func didAddNewAlarm()
@@ -141,6 +142,7 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
     @IBAction func pushToSound(_ sender: Any) {
         let soundVC = SoundViewController()
         soundVC.delegate = self
+        soundVC.currentSelectedSound = selectedSound
         self.navigationController?.pushViewController(soundVC, animated: true)
     }
     
@@ -151,7 +153,8 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
             alarmTime: formatDate(datePicker.date),
             creatTime: getSystemTime(),
             name: txfRename.text?.isEmpty == true ? "鬧鐘" : txfRename.text ?? "",
-            repeatDays: repeatDays
+            repeatDays: repeatDays,
+            sound: selectedSound
         )
         
         try! realm.write {
@@ -160,6 +163,7 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
                 alarms.insert(newAlarm, at: 0)
             }
         }
+        scheduleNotification(for: newAlarm)
         delegate?.didAddNewAlarm()
         print("flies: ", realm.configuration.fileURL!)
         self.dismiss(animated: true, completion: nil)
@@ -172,7 +176,9 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
             alarm.name = txfRename.text?.isEmpty == true ? "鬧鐘" : txfRename.text ?? ""
             alarm.repeatDays.removeAll()
             alarm.repeatDays.append(objectsIn: repeatDays)
+            alarm.sound = selectedSound
         }
+        scheduleNotification(for: alarm)
         delegate?.didUpdateAlarm()
         self.dismiss(animated: true, completion: nil)
     }
@@ -209,7 +215,9 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         datePicker.date = formatStringToDate(alarm.alarmTime) ?? Date()
         txfRename.text = alarm.name
         repeatDays = Array(alarm.repeatDays)
+        selectedSound = alarm.sound
         updateRepeatButtonTitle()
+        updateSoundButtonTitle()
     }
     
     func formatStringToDate(_ dateString: String) -> Date? {
@@ -219,6 +227,52 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         formatter.pmSymbol = "下午"
         formatter.locale = Locale(identifier: "zh_TW")
         return formatter.date(from: dateString)
+    }
+    
+    func scheduleNotification(for alarm: AlarmData) {
+        let center = UNUserNotificationCenter.current()
+        
+        // 首先，移除與此鬧鐘相關的所有現有通知
+        center.removePendingNotificationRequests(withIdentifiers: [alarm.creatTime])
+        for index in 0..<7 {
+            center.removePendingNotificationRequests(withIdentifiers: ["\(alarm.creatTime)_\(index)"])
+        }
+        
+        let content = UNMutableNotificationContent()
+        content.title = alarm.name
+        content.body = "鬧鐘時間到了！"
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(alarm.sound).mp3"))
+        
+        let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: formatStringToDate(alarm.alarmTime) ?? Date())
+        
+        if alarm.repeatDays.contains(true) {
+            // 如果有重複的天數，為每個重複的天數創建一個觸發器
+            for (index, isSelected) in alarm.repeatDays.enumerated() where isSelected {
+                var triggerDateComponents = dateComponents
+                triggerDateComponents.weekday = index + 1 // 週日是1，週六是7
+                
+                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: true)
+                
+                let request = UNNotificationRequest(identifier: "\(alarm.creatTime)_\(index)", content: content, trigger: trigger)
+                
+                center.add(request) { error in
+                    if let error = error {
+                        print("Error scheduling notification: \(error)")
+                    }
+                }
+            }
+        } else {
+            // 如果沒有重複，只創建一次性的通知
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: alarm.creatTime, content: content, trigger: trigger)
+            
+            center.add(request) { error in
+                if let error = error {
+                    print("Error scheduling notification: \(error)")
+                }
+            }
+        }
     }
 }
 

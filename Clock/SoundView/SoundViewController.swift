@@ -22,12 +22,17 @@ class SoundViewController: UIViewController {
     let sounds = ["馬林巴琴", "鬼畜", "雷達", "sunkis trust me", "Huu"]
     var selectedSoundIndex: Int = 0
     var audioPlayer: AVAudioPlayer?
+    var currentSelectedSound: String?
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        if let currentSound = currentSelectedSound,
+           let index = sounds.firstIndex(of: currentSound) {
+            selectedSoundIndex = index
+        }
     }
     
     // MARK: - UI Settings

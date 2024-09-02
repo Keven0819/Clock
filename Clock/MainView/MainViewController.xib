@@ -19,9 +19,12 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tabBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HNF-eI-bs9">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eLA-t1-980">
+                    <rect key="frame" x="0.0" y="59" width="393" height="680"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+                <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HNF-eI-bs9">
                     <rect key="frame" x="0.0" y="769" width="393" height="49"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <items>
                         <tabBarItem title="世界時鐘" image="globe" catalog="system" id="oMR-qS-o7n"/>
@@ -30,18 +33,18 @@
                         <tabBarItem title="計時器" image="timer" catalog="system" id="aht-Qb-HIl"/>
                     </items>
                 </tabBar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eLA-t1-980">
-                    <rect key="frame" x="0.0" y="-5" width="393" height="773"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="eLA-t1-980" firstAttribute="centerY" secondItem="fnl-2z-Ty3" secondAttribute="centerY" multiplier="0.87" id="FE2-EG-Mbl"/>
-                <constraint firstItem="eLA-t1-980" firstAttribute="width" secondItem="fnl-2z-Ty3" secondAttribute="width" id="Lq6-3S-M0K"/>
-                <constraint firstItem="eLA-t1-980" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="Yry-DF-oWW"/>
-                <constraint firstItem="eLA-t1-980" firstAttribute="height" secondItem="fnl-2z-Ty3" secondAttribute="height" multiplier="1.01845" id="kgO-pd-uxH"/>
+                <constraint firstItem="eLA-t1-980" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.798122" id="5tv-Hb-PK5"/>
+                <constraint firstItem="HNF-eI-bs9" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.0575117" id="I6s-nf-MmG"/>
+                <constraint firstItem="eLA-t1-980" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="IcW-BL-Dda"/>
+                <constraint firstItem="eLA-t1-980" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="SfV-O6-8UF"/>
+                <constraint firstItem="HNF-eI-bs9" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="VTg-L0-1oE"/>
+                <constraint firstItem="eLA-t1-980" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="bW1-AQ-b1n"/>
+                <constraint firstItem="HNF-eI-bs9" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="q2O-Xm-KdG"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="HNF-eI-bs9" secondAttribute="bottom" id="zBr-cn-Rnn"/>
             </constraints>
             <point key="canvasLocation" x="179.38931297709922" y="11.971830985915494"/>
         </view>
