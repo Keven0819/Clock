@@ -42,8 +42,11 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         super.viewDidLoad()
         setUI()
         setupTextFieldDelegate()
-        if let alarm = alarmToEdit {
+        if let alarm = alarmToEdit, !alarm.isInvalidated {
             populateFields(with: alarm)
+        } else {
+            print("Invalid or deleted alarm")
+            // 可能的話，您可以在這裡處理無效鬧鐘的情況
         }
     }
     
@@ -159,9 +162,6 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         
         try! realm.write {
             realm.add(newAlarm)
-            if isAscending {
-                alarms.insert(newAlarm, at: 0)
-            }
         }
         scheduleNotification(for: newAlarm)
         delegate?.didAddNewAlarm()
@@ -240,7 +240,7 @@ class AddAlarmViewController: UIViewController, RepeatViewControllerDelegate, So
         
         let content = UNMutableNotificationContent()
         content.title = alarm.name
-        content.body = "鬧鐘時間到了！"
+        content.body = "\(alarm.alarmTime)到了！"
         content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(alarm.sound).mp3"))
         
         let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: formatStringToDate(alarm.alarmTime) ?? Date())

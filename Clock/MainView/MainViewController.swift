@@ -76,7 +76,7 @@ class MainViewController: UIViewController {
     @objc func alarmSwitchChange(_ sender: UISwitch) {
         let index = sender.tag
         let realm = try! Realm()
-        if let alarm = realm.objects(AlarmData.self).sorted(byKeyPath: "creatTime", ascending: false)[safe: index], !alarm.isInvalidated {
+        if let alarm = alarms[safe: index], !alarm.isInvalidated {
             try! realm.write {
                 alarm.isEnabled = sender.isOn
             }
@@ -95,8 +95,7 @@ class MainViewController: UIViewController {
     
     func deleteAlarm(_ alarm: AlarmData, at indexPath: IndexPath) {
         let realm = try! Realm()
-        
-        // 刪除與此鬧鐘相關的所有通知
+            
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.creatTime])
         for index in 0..<7 {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["\(alarm.creatTime)_\(index)"])
@@ -124,17 +123,16 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? alarms.filter { $0.isEnabled }.count : alarms.filter { !$0.isEnabled }.count
+        return alarms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SecondTableViewCell.identifier, for: indexPath) as! SecondTableViewCell
-        let filteredAlarms = alarms.filter { indexPath.section == 0 ? $0.isEnabled : !$0.isEnabled }
-        let alarm = filteredAlarms[indexPath.row]
+        let alarm = alarms[indexPath.row]
         cell.lbList.text = alarm.alarmTime
         cell.lbName.text = alarm.name.isEmpty ? "鬧鐘" : alarm.name
         cell.swAlarm.isOn = alarm.isEnabled
@@ -148,8 +146,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.allowsSelection = true
         tableView.deselectRow(at: indexPath, animated: true)
-        let filteredAlarms = alarms.filter { indexPath.section == 0 ? $0.isEnabled : !$0.isEnabled }
-        let alarm = filteredAlarms[indexPath.row]
+        let alarm = alarms[indexPath.row]
         let editAlarmVC = AddAlarmViewController(nibName: "AddAlarmViewController", bundle: nil)
         editAlarmVC.alarmToEdit = alarm
         editAlarmVC.selectedSound = alarm.sound
